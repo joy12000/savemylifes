@@ -14,3 +14,14 @@
 [[edge_functions]]
   function = "chat-sse"
   path = "/sse/:room"
+
+
+[[headers]]
+  for = "/favicon.ico"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/favicon.png"
+  [headers.values]
+    Cache-Control = "no-cache"
