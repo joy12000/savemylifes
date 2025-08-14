@@ -2,32 +2,18 @@
   command = "npm ci && npm run build"
   publish = "dist"
 
+[context.production]
+  command = "npm ci && npm run build"
+
+[context.deploy-preview]
+  command = "npm ci && npm run build"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-[functions]
-  node_bundler = "esbuild"
-  included_files = []
-
-[[edge_functions]]
-  function = "chat-sse"
-  path = "/sse/:room"
-
-
-[[headers]]
-  for = "/favicon.ico"
-  [headers.values]
-    Cache-Control = "no-cache"
-
-[[headers]]
-  for = "/favicon.png"
-  [headers.values]
-    Cache-Control = "no-cache"
-
-
-# Guarantee favicon served even if ico missing in some builds
+# Favicon fallback rewrite
 [[redirects]]
   from = "/favicon.ico"
   to = "/favicon.png"

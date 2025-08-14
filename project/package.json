@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "postbuild": "mkdir -p dist && cp -f index.html dist/200.html && printf '/* /index.html 200\\n' > dist/_redirects && date +%s > dist/health.txt"
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^2.1.3",
