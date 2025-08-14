@@ -1,19 +1,17 @@
 [build]
-  command = "npm ci && npm run build"
+  command = "npm install --no-audit --no-fund && npm run build"
   publish = "dist"
 
-[context.production]
-  command = "npm ci && npm run build"
-
-[context.deploy-preview]
-  command = "npm ci && npm run build"
+# Functions/Edge directories (존재할 때만 적용됩니다)
+functions = "netlify/functions"
+edge_functions = "netlify/edge-functions"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# Favicon fallback rewrite
+# 파비콘 안전장치(없어도 무방)
 [[redirects]]
   from = "/favicon.ico"
   to = "/favicon.png"
