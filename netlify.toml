@@ -1,0 +1,20 @@
+[build]
+  command = "npm ci && npm run build"
+  publish = "dist"
+
+[context.production]
+  command = "npm ci && npm run build"
+
+[context.deploy-preview]
+  command = "npm ci && npm run build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Favicon fallback rewrite
+[[redirects]]
+  from = "/favicon.ico"
+  to = "/favicon.png"
+  status = 200
