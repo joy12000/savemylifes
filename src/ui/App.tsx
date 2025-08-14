@@ -35,12 +35,12 @@ export function App() {
 
   if (isLoading) return <div style={{padding:16}}>로딩중…</div>;
 
-  if (!user) {
+  if (!user || !auth0) {
     return (
       <div style={{padding:24, display:'grid', gap:12, maxWidth:520}}>
         <h1>로그인 필요</h1>
         <p>Netlify + Auth0 + Blobs로 만든 실제 작동 채팅 데모</p>
-        <button onClick={() => auth0!.loginWithRedirect()}>Auth0로 로그인</button>
+        <button onClick={() => auth0?.loginWithRedirect()}>Auth0로 로그인</button>
       </div>
     );
   }
@@ -51,10 +51,10 @@ export function App() {
         <h1>채팅 데모</h1>
         <div style={{display:'flex', gap:12, alignItems:'center'}}>
           <span>{user.name || user.email}</span>
-          <button onClick={() => auth0!.logout({ logoutParams: { returnTo: window.location.origin } })}>로그아웃</button>
+          <button onClick={() => auth0.logout({ logoutParams: { returnTo: window.location.origin } })}>로그아웃</button>
         </div>
       </div>
-      <Chat user={user} />
+      <Chat user={user} auth0={auth0} />
     </div>
   );
 }

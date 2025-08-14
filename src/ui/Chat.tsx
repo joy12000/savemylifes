@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import type { Auth0Client } from "@auth0/auth0-spa-js";
 
 type Msg = {
   id: string;
@@ -11,27 +12,42 @@ type Msg = {
 
 const ROOM_ID = "general";
 
-export function Chat({ user }: { user: any }) {
+async function getBearer(auth0: Auth0Client) {
+  // ID 토큰을 Bearer로 사용 (API audience 없이도 동작)
+  const claims = await auth0.getIdTokenClaims();
+  return claims?.__raw;
+}
+
+export function Chat({ user, auth0 }: { user: any, auth0: Auth0Client }) {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [text, setText] = useState("");
   const evtRef = useRef<EventSource | null>(null);
 
   async function fetchHistory() {
-    const res = await fetch(`/api/chat-list?room=${encodeURIComponent(ROOM_ID)}&limit=50`, { credentials: "include" });
+    const token = await getBearer(auth0);
+    const res = await fetch(`/.netlify/functions/chat-list?room=${encodeURIComponent(ROOM_ID)}&limit=50`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      credentials: "include"
+    });
     const data = await res.json();
     setMessages(data.messages || []);
   }
 
   async function sendMessage() {
+    const token = await getBearer(auth0);
     const body = { room: ROOM_ID, text };
     const res = await fetch("/.netlify/functions/chat-post", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
       credentials: "include",
       body: JSON.stringify(body),
     });
     if (!res.ok) {
-      alert("메시지 전송 실패");
+      const t = await res.text();
+      alert("메시지 전송 실패: " + t);
       return;
     }
     setText("");
@@ -39,7 +55,6 @@ export function Chat({ user }: { user: any }) {
 
   useEffect(() => {
     fetchHistory();
-    // SSE 구독
     const url = `/sse/${encodeURIComponent(ROOM_ID)}`;
     const es = new EventSource(url, { withCredentials: true });
     evtRef.current = es;
@@ -53,7 +68,7 @@ export function Chat({ user }: { user: any }) {
         });
       } catch {}
     };
-    es.onerror = () => { /* silent; edge function will retry via client reconnect */ };
+    es.onerror = () => {};
     return () => { es.close(); };
   }, []);
 
