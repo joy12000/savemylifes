@@ -25,3 +25,10 @@
   for = "/favicon.png"
   [headers.values]
     Cache-Control = "no-cache"
+
+
+# Guarantee favicon served even if ico missing in some builds
+[[redirects]]
+  from = "/favicon.ico"
+  to = "/favicon.png"
+  status = 200
