@@ -21,7 +21,6 @@ async function verifyAuth(event: any) {
 
 export const handler: Handler = async (event) => {
   try {
-    // 읽기에도 인증을 요구(원하면 주석 처리로 Public 읽기로 변경 가능)
     const payload = await verifyAuth(event);
     if (!payload) return { statusCode: 401, body: "Unauthorized" };
 
@@ -30,12 +29,11 @@ export const handler: Handler = async (event) => {
     const limit = Math.min(parseInt(String(params.limit || "50")), 200);
 
     const store = getStore({ name: "chat" });
-    const prefix = `rooms/${room}/messages/`;
-    const listing = await store.list({ prefix });
+    const listing = await store.list({ prefix: `rooms/${room}/messages/` });
     const keys = (listing.blobs || []).map(b => b.key).sort();
     const last = keys.slice(-limit);
 
-    const messages = [];
+    const messages: any[] = [];
     for (const key of last) {
       try {
         const m = await store.getJSON(key);

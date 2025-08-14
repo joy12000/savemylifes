@@ -14,7 +14,6 @@ async function verifyAuth(event: any) {
   const JWKS = jose.createRemoteJWKSet(new URL(`${issuer}.well-known/jwks.json`));
   const { payload } = await jose.jwtVerify(token, JWKS, {
     issuer,
-    // audience is optional when using ID token; set if you configured it
     audience: process.env.AUTH0_AUDIENCE || process.env.VITE_AUTH0_AUDIENCE
   });
   return payload;

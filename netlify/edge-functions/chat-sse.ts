@@ -13,30 +13,22 @@ export default async (request: Request, context: any) => {
       };
 
       let lastKeys: string[] = [];
-      // Warmup: send nothing; client will fetch history via REST
-      // Poll every 2s for new keys and emit them
       const interval = setInterval(async () => {
         try {
           const listing = await store.list({ prefix: `rooms/${room}/messages/` });
-       	  const keys = (listing.blobs || []).map((b: any) => b.key).sort();
+          const keys = (listing.blobs || []).map((b: any) => b.key).sort();
           const fresh = keys.filter((k: string) => !lastKeys.includes(k));
           lastKeys = keys.slice(-200);
           for (const key of fresh) {
             const m = await store.getJSON(key);
             if (m) send(m);
           }
-        } catch (_err) {
-          // soft fail; next tick
-        }
+        } catch {}
       }, 2000);
 
-      // Keepalive
       const ka = setInterval(() => controller.enqueue(new TextEncoder().encode(`:keepalive\n\n`)), 15000);
 
-      // Cleanup
-      const abort = () => { clearInterval(interval); clearInterval(ka); controller.close(); };
-      // Edge doesn't expose signal directly; rely on connection close handled by platform.
-      context.waitUntil(new Promise((resolve) => {}));
+      context.waitUntil(new Promise((_resolve) => {}));
     }
   });
 

@@ -2,7 +2,6 @@
   command = "npm install --no-audit --no-fund && npm run build"
   publish = "dist"
 
-# Functions/Edge directories (존재할 때만 적용됩니다)
 functions = "netlify/functions"
 edge_functions = "netlify/edge-functions"
 
@@ -11,8 +10,11 @@ edge_functions = "netlify/edge-functions"
   to = "/index.html"
   status = 200
 
-# 파비콘 안전장치(없어도 무방)
 [[redirects]]
   from = "/favicon.ico"
   to = "/favicon.png"
   status = 200
+
+[[edge_functions]]
+  function = "chat-sse"
+  path = "/sse/:room"

@@ -13,7 +13,6 @@ type Msg = {
 const ROOM_ID = "general";
 
 async function getBearer(auth0: Auth0Client) {
-  // ID 토큰을 Bearer로 사용 (API audience 없이도 동작)
   const claims = await auth0.getIdTokenClaims();
   return claims?.__raw;
 }
