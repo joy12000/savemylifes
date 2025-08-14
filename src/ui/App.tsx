@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import createAuth0Client, { Auth0Client } from "@auth0/auth0-spa-js";
+import React, { useEffect, useState } from "react";
+import { createAuth0Client, type Auth0Client } from "@auth0/auth0-spa-js";
 import { Chat } from "./Chat";
 
 export function App() {
@@ -19,7 +19,6 @@ export function App() {
       });
       setAuth0(client);
 
-      // handle callback
       if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
         await client.handleRedirectCallback();
         window.history.replaceState({}, document.title, "/");
