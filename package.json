@@ -26,10 +26,22 @@
     "@types/react": "19.0.14",
     "@types/react-dom": "19.0.2",
     "typescript": "^5.5.4",
-    "metro": "0.80.9"
+    "metro": "0.80.10",
+    "metro-config": "0.80.10",
+    "metro-runtime": "0.80.10",
+    "metro-resolver": "0.80.10",
+    "metro-source-map": "0.80.10",
+    "metro-transform-worker": "0.80.10",
+    "metro-babel-transformer": "0.80.10"
   },
   "overrides": {
     "@expo/vector-icons": "14.1.0",
-    "metro": "0.80.9"
+    "metro": "0.80.10",
+    "metro-config": "0.80.10",
+    "metro-runtime": "0.80.10",
+    "metro-resolver": "0.80.10",
+    "metro-source-map": "0.80.10",
+    "metro-transform-worker": "0.80.10",
+    "metro-babel-transformer": "0.80.10"
   }
 }
