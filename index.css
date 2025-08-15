@@ -1,0 +1,15 @@
+/* Tailwind entrypoint: keep it tiny and universal */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* App minimal defaults to avoid FOUC if custom styles are missing */
+:root {
+  --brand: #2563eb;
+  --bg: #0b1220;
+  --fg: #e5e7eb;
+}
+
+html, body, #root { height: 100%; }
+body { background: var(--bg); color: var(--fg); }
+a { text-decoration: none; }
