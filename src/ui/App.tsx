@@ -1,6 +1,7 @@
-
-import React, { useEffect, useMemo, useState } from "react"
-import createAuth0Client, { Auth0Client } from "@auth0/auth0-spa-js"
+import React, { useEffect, useState } from "react"
+// ⬇️ default가 아님! named import로 바꿔야 함
+import { createAuth0Client } from "@auth0/auth0-spa-js"
+import type { Auth0Client } from "@auth0/auth0-spa-js"
 import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom"
 import Chat from "./Chat"
 import Report from "./Report"
@@ -22,7 +23,7 @@ export default function App() {
           ...(audience ? { audience } : {})
         }
       })
-      // Handle redirect callback
+      // 로그인 리다이렉트 처리
       if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
         await auth.handleRedirectCallback()
         window.history.replaceState({}, document.title, window.location.pathname)
@@ -32,7 +33,7 @@ export default function App() {
     })()
   }, [domain, clientId, audience])
 
-  if (!auth0) return <div style={{padding:20}}>로딩 중…</div>
+  if (!auth0) return <div style={{ padding: 20 }}>로딩 중…</div>
 
   return (
     <BrowserRouter>
@@ -45,25 +46,27 @@ export default function App() {
   )
 }
 
-function Nav({ auth0, isAuth, onAuthChange }:{auth0: Auth0Client, isAuth: boolean, onAuthChange: (b:boolean)=>void}){
+function Nav({
+  auth0, isAuth, onAuthChange
+}: { auth0: Auth0Client; isAuth: boolean; onAuthChange: (b: boolean) => void }) {
   const nav = useNavigate()
-  async function login(){
+  async function login() {
     await auth0.loginWithRedirect()
   }
-  async function logout(){
+  async function logout() {
     await auth0.logout({ logoutParams: { returnTo: window.location.origin } })
     onAuthChange(false)
     nav("/")
   }
-  useEffect(()=>{
-    (async ()=> onAuthChange(await auth0.isAuthenticated()))()
+  useEffect(() => {
+    (async () => onAuthChange(await auth0.isAuthenticated()))()
   }, [auth0, onAuthChange])
 
   return (
-    <div style={{display:"flex", gap:12, padding:12, borderBottom:"1px solid #eee", alignItems:"center"}}>
-      <Link to="/" style={{fontWeight:800}}>생존신고·채팅</Link>
+    <div style={{ display: "flex", gap: 12, padding: 12, borderBottom: "1px solid #eee", alignItems: "center" }}>
+      <Link to="/" style={{ fontWeight: 800 }}>생존신고·채팅</Link>
       <Link to="/report">생존신고</Link>
-      <div style={{marginLeft:"auto"}}>
+      <div style={{ marginLeft: "auto" }}>
         {isAuth ? <button onClick={logout}>로그아웃</button> : <button onClick={login}>로그인</button>}
       </div>
     </div>
