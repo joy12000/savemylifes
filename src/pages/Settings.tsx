@@ -11,11 +11,11 @@ export default function Settings() {
           <button className="btn btn-ghost" onClick={()=>nav(-1)}>← 뒤로가기</button>
         </div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <label className="flex items-center justify-between bg-white/60 dark:bg-slate-900/40 border border-white/40 dark:border-white/10 px-3 py-2 rounded-xl">
+          <label className="flex items-center justify-between bg-white/70 dark:bg-slate-900/50 border border-white/40 dark:border-white/10 px-3 py-2 rounded-xl">
             <span>다크모드</span>
             <span className="badge">헤더 우측 토글</span>
           </label>
-          <label className="flex items-center justify-between bg-white/60 dark:bg-slate-900/40 border border-white/40 dark:border-white/10 px-3 py-2 rounded-xl">
+          <label className="flex items-center justify-between bg-white/70 dark:bg-slate-900/50 border border-white/40 dark:border-white/10 px-3 py-2 rounded-xl">
             <span>알림</span><span className="badge">추가 예정</span>
           </label>
         </div>

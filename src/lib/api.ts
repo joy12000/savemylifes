@@ -1,7 +1,13 @@
+import { getToken } from './authBridge'
+
 export async function saveMessage({ room, text, meta }: { room: string; text: string; meta?: any }) {
+  const token = await getToken()
   const res = await fetch('/.netlify/functions/message', {
     method: 'POST',
-    headers: {  'Content-Type': 'application/json'  },
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
     body: JSON.stringify({ room, text, meta }),
   })
   if (!res.ok) throw new Error(await res.text())
@@ -9,7 +15,12 @@ export async function saveMessage({ room, text, meta }: { room: string; text: st
 }
 
 export async function listMessages(room: string) {
-  const res = await fetch('/.netlify/functions/messages?room=' + encodeURIComponent(room))
+  const token = await getToken()
+  const res = await fetch('/.netlify/functions/messages?room=' + encodeURIComponent(room), {
+    headers: {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  })
   if (!res.ok) throw new Error(await res.text())
   const data = await res.json()
   return data.items || []
@@ -21,4 +32,18 @@ export function subscribe(room: string, onMessage: (m: any)=>void) {
     try { onMessage(JSON.parse(ev.data)) } catch {}
   }
   return () => es.close()
+}
+
+
+export async function doCheckIn() {
+  const token = await getToken()
+  const res = await fetch('/.netlify/functions/checkin', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  })
+  if (!res.ok) throw new Error(await res.text())
+  return res.json() as Promise<{ ok: boolean; already?: boolean; ts?: number }>
 }

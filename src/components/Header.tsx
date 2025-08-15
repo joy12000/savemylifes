@@ -10,7 +10,7 @@ export default function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-50">
       <div className="mx-auto max-w-4xl px-4">
-        <nav className="mt-3 bg-white/70 dark:bg-slate-900/50 backdrop-blur border border-white/40 dark:border-white/10 rounded-2xl shadow-elev">
+        <nav className="mt-3 bg-white/70 dark:bg-slate-900/50 border border-white/40 dark:border-white/10 rounded-2xl shadow-elev">
           <div className="h-16 px-4 flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2 font-semibold text-lg">
               <Bot className="w-5 h-5 text-brand-600" /> KeepAlive

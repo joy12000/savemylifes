@@ -1,8 +1,9 @@
 // netlify/functions/messages.js
 const { getStore } = require('@netlify/blobs')
-const { verifyAuth } = require('./_common')
 
 exports.handler = async (event, context) => {
+  const authHeader = event.headers['authorization'] || event.headers['Authorization'] || ''
+  // 읽기는 공개로 두되 필요하면 여기서 검증 추가 가능
   const room = (event.queryStringParameters && event.queryStringParameters.room) || 'default'
   const store = getStore('messages')
   const { blobs } = await store.list({ prefix: `rooms/${room}/messages/`, limit: 1000 })

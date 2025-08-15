@@ -3,12 +3,19 @@ import { ReactNode } from 'react'
 
 const domain = import.meta.env.VITE_AUTH0_DOMAIN || (window as any).ENV_AUTH0_DOMAIN
 const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID || (window as any).ENV_AUTH0_CLIENT_ID
-const redirectUri = window.location.origin/
+const audience = import.meta.env.VITE_AUTH0_AUDIENCE || (window as any).ENV_AUTH0_AUDIENCE
+const redirectUri = window.location.origin
 
 export function AuthGate({ children }: { children: ReactNode }) {
   if (!domain || !clientId) return <>{children}</>
   return (
-    <Auth0Provider domain={domain} clientId={clientId} authorizationParams={{ redirect_uri: redirectUri }}>
+    <Auth0Provider
+      domain={domain}
+      clientId={clientId}
+      authorizationParams={{ redirect_uri: redirectUri, ...(audience ? { audience } : {}) }}
+      useRefreshTokens
+      cacheLocation="localstorage"
+    >
       {children}
     </Auth0Provider>
   )

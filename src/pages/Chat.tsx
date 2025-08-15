@@ -10,28 +10,31 @@ export default function Chat() {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    let unsub = () => {}
     ;(async () => {
       const initial = await listMessages(room)
       setMessages(initial)
-      subscribe(room, (msg) => setMessages((m) => [...m, msg]))
+      unsub = subscribe(room, (msg) => setMessages((m) => [...m, msg]))
     })()
+    return () => unsub()
   }, [room])
 
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
 
   async function send() {
-    if (!input.trim()) return
-    await saveMessage({ room, text: input })
+    const text = input.trim()
+    if (!text) return
     setInput('')
+    await saveMessage({ room, text })
   }
 
   return (
-    <motion.div initial={{opacity:0, y:8}} animate={{opacity:1, y:0}} className="mt-6 space-y-4">
-      <div className="card p-5">
-        <div className="flex items-center justify-between">
-          <h2 className="font-semibold">채팅방: {room}</h2>
-        </div>
-        <div className="mt-3 space-y-2 max-h-[55vh] overflow-auto pr-1">
+    <motion.div initial={{opacity:0, y:8}} animate={{opacity:1, y:0}} className="mt-6">
+      <div className="card p-4 sm:p-5">
+        <div className="text-lg font-semibold mb-3">채팅</div>
+        <div className="space-y-2 max-h-[60vh] overflow-auto pr-1">
           {messages.map((m, i) => (
             <div key={m.id || i} className="flex">
               <div className="rounded-2xl bg-slate-100 dark:bg-slate-800 px-3 py-2 shadow-soft w-full">
@@ -39,9 +42,10 @@ export default function Chat() {
                   <span>{new Date(m.ts||Date.now()).toLocaleString()}</span>
                   {m.meta?.kind === 'sos' && <span className="badge">SOS</span>}
                 </div>
-                <div className="whitespace-pre-wrap">{m.text}</div>
+                <div className="whitespace-pre-wrap break-words">{m.text}</div>
                 {m.meta?.geo && (
-                  <a className="text-sm text-brand-600 underline" target="_blank" href={`https://maps.google.com/?q=${m.meta.geo.lat},${m.meta.geo.lon}`}>
+                  <a className="text-sm text-brand-600 underline" target="_blank" rel="noreferrer"
+                    href={`https://maps.google.com/?q=${m.meta.geo.lat},${m.meta.geo.lon}`}>
                     지도에서 보기
                   </a>
                 )}

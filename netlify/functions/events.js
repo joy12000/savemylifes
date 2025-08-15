@@ -1,6 +1,5 @@
 // netlify/functions/events.js
 const { getStore } = require('@netlify/blobs')
-const { verifyAuth } = require('./_common')
 
 exports.handler = async (event, context) => {
   const room = (event.queryStringParameters && event.queryStringParameters.room) || 'default'
@@ -15,20 +14,19 @@ exports.handler = async (event, context) => {
     },
     body: await new Promise(async (resolve) => {
       const store = getStore('messages')
-      let cursor = ''
-      let timer
-      const encoder = new TextEncoder()
+      let since = 0
       let buffer = ''
+      let timer = null
 
       async function tick() {
-        const { blobs, cursor: next } = await store.list({ prefix: `rooms/${room}/messages/`, cursor, limit: 50 })
-        cursor = next || cursor
-        // 최근 10개만 발행
-        for (const b of blobs.slice(-10)) {
+        const { blobs } = await store.list({ prefix: `rooms/${room}/messages/`, limit: 20 })
+        const news = blobs
+          .filter(b => b.uploadedAt > since)
+          .sort((a,b)=> (a.uploadedAt > b.uploadedAt ? 1 : -1))
+        for (const b of news) {
           const data = await store.get(b.key, { type: 'json' })
-          if (data) {
-            buffer += `data: ${JSON.stringify(data)}\n\n`
-          }
+          if (data) buffer += `data: ${JSON.stringify(data)}\n\n`
+          since = Math.max(since, b.uploadedAt)
         }
         timer = setTimeout(tick, 2000)
       }
