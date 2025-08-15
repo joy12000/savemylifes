@@ -1,4 +1,3 @@
-
 import type { Context } from "@netlify/functions"
 import { blobs, verifyAuth0 } from "./_common"
 
@@ -15,6 +14,6 @@ export default async (req: Request, _ctx: Context) => {
   const store = blobs("chat")
   const msg = { id: crypto.randomUUID(), userId: String(sub), text: String(text), ts: Date.now() }
   await store.set(`rooms/${room}/messages/${msg.id}.json`, JSON.stringify(msg))
-  await store.set(`rooms/${room}/latest.json`, JSON.stringify(msg)) // SSE 폴링 힌트
+  await store.set(`rooms/${room}/latest.json`, JSON.stringify(msg))
   return new Response(JSON.stringify({ ok: true, msg }), { headers: { "content-type": "application/json" } })
 }

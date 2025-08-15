@@ -1,4 +1,3 @@
-
 import type { Context } from "@netlify/functions"
 import { getStore } from "@netlify/blobs"
 import * as jose from "jose"

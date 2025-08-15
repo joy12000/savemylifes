@@ -1,4 +1,3 @@
-
 import { getStore } from "@netlify/blobs"
 import * as jose from "jose"
 

@@ -1,3 +1,3 @@
-// noop service worker for PWA install prompt
+// minimal service worker for install prompt
 self.addEventListener('install', ()=>self.skipWaiting())
 self.addEventListener('activate', ()=>self.clients.claim())

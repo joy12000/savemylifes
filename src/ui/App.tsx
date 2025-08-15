@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react"
-// ⬇️ default가 아님! named import로 바꿔야 함
 import { createAuth0Client } from "@auth0/auth0-spa-js"
 import type { Auth0Client } from "@auth0/auth0-spa-js"
 import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom"
@@ -23,7 +22,6 @@ export default function App() {
           ...(audience ? { audience } : {})
         }
       })
-      // 로그인 리다이렉트 처리
       if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
         await auth.handleRedirectCallback()
         window.history.replaceState({}, document.title, window.location.pathname)

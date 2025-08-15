@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react"
 
 type Props = {
@@ -27,7 +26,6 @@ export default function Chat({ auth0 }: Props) {
   }
 
   useEffect(()=>{
-    // 최초 목록
     (async ()=>{
       const claims = await auth0.getIdTokenClaims()
       const token = claims?.__raw as string | undefined
@@ -40,7 +38,6 @@ export default function Chat({ auth0 }: Props) {
       }
     })()
 
-    // SSE 구독
     const es = new EventSource(`/sse/${room}`)
     es.onmessage = (evt)=>{
       try{

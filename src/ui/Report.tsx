@@ -1,4 +1,3 @@
-
 import React, { useState } from "react"
 
 type Props = { auth0: { getIdTokenClaims: () => Promise<any> } }

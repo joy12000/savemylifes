@@ -1,4 +1,3 @@
-
 import type { Config } from "@netlify/functions"
 import { getStore } from "@netlify/blobs"
 
@@ -26,7 +25,7 @@ export default async () => {
   if(hook){
     try{
       await fetch(hook, { method:"POST", headers: { "content-type": "application/json" }, body: JSON.stringify(out) })
-    }catch{ /* ignore */ }
+    }catch{}
   }
   return new Response(`ok ${overdue.length}`)
 }
