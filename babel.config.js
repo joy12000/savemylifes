@@ -1,14 +1,4 @@
-// 덮어쓰기 OK: Expo + alias('@') 설정
 module.exports = function (api) {
   api.cache(true);
-  return {
-    presets: ['babel-preset-expo'],
-    plugins: [
-      'expo-router/babel',
-      ['module-resolver', {
-        root: ['.'],
-        alias: { '@': './' }
-      }],
-    ],
-  };
+  return { presets: ['babel-preset-expo'], plugins: [] };
 };
