@@ -1,17 +1,29 @@
 import { Link, useLocation } from 'react-router-dom'
+import { Bot, ClipboardPaste, MessageSquare, Settings as IconSettings, Sun, Moon } from 'lucide-react'
+import ThemeToggle from './ThemeToggle'
 
 export default function Header() {
   const { pathname } = useLocation()
+  const link = (to: string, label: string, icon: JSX.Element) => (
+    <Link to={to} className={`btn btn-ghost ${pathname===to ? 'ring-2 ring-brand-400' : ''}`}>{icon}{label}</Link>
+  )
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200">
-      <nav className="max-w-3xl mx-auto px-[var(--safe-gutter)] h-16 flex items-center justify-between">
-        <Link to="/" className="font-bold text-lg">🛰️ KeepAlive</Link>
-        <div className="flex gap-2">
-          <Link to="/capture" className={`btn btn-ghost ${pathname==='/capture'?'ring-2 ring-brand-400':''}`}>Capture</Link>
-          <Link to="/chat" className={`btn btn-ghost ${pathname==='/chat'?'ring-2 ring-brand-400':''}`}>Chat</Link>
-          <Link to="/settings" className={`btn btn-ghost ${pathname==='/settings'?'ring-2 ring-brand-400':''}`}>설정</Link>
-        </div>
-      </nav>
+    <header className="fixed inset-x-0 top-0 z-50">
+      <div className="mx-auto max-w-4xl px-4">
+        <nav className="mt-3 bg-white/70 dark:bg-slate-900/50 backdrop-blur border border-white/40 dark:border-white/10 rounded-2xl shadow-elev">
+          <div className="h-16 px-4 flex items-center justify-between">
+            <Link to="/" className="flex items-center gap-2 font-semibold text-lg">
+              <Bot className="w-5 h-5 text-brand-600" /> KeepAlive
+            </Link>
+            <div className="flex items-center gap-2">
+              {link('/capture', 'Capture', <ClipboardPaste className="w-4 h-4" />)}
+              {link('/chat', 'Chat', <MessageSquare className="w-4 h-4" />)}
+              {link('/settings', '설정', <IconSettings className="w-4 h-4" />)}
+              <ThemeToggle />
+            </div>
+          </div>
+        </nav>
+      </div>
     </header>
   )
 }
