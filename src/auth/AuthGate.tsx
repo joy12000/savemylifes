@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 
 const domain = import.meta.env.VITE_AUTH0_DOMAIN || (window as any).ENV_AUTH0_DOMAIN
 const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID || (window as any).ENV_AUTH0_CLIENT_ID
-const redirectUri = window.location.origin
+const redirectUri = window.location.origin/
 
 export function AuthGate({ children }: { children: ReactNode }) {
   if (!domain || !clientId) return <>{children}</>
