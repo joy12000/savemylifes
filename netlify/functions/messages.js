@@ -1,5 +1,6 @@
 // netlify/functions/messages.js
 const { getStore } = require('@netlify/blobs')
+const { verifyAuth } = require('./_common')
 
 exports.handler = async (event, context) => {
   const room = (event.queryStringParameters && event.queryStringParameters.room) || 'default'

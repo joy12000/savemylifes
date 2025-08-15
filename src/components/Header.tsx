@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Bot, ClipboardPaste, MessageSquare, Settings as IconSettings, Sun, Moon } from 'lucide-react'
+import { Bot, MessageSquare, Settings as IconSettings } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
 
 export default function Header() {
@@ -16,7 +16,6 @@ export default function Header() {
               <Bot className="w-5 h-5 text-brand-600" /> KeepAlive
             </Link>
             <div className="flex items-center gap-2">
-              {link('/capture', 'Capture', <ClipboardPaste className="w-4 h-4" />)}
               {link('/chat', 'Chat', <MessageSquare className="w-4 h-4" />)}
               {link('/settings', '설정', <IconSettings className="w-4 h-4" />)}
               <ThemeToggle />

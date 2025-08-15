@@ -1,20 +1,8 @@
-import { Auth0Client } from '@auth0/auth0-react'
-
-async function token() {
-  // 토큰이 없어도 우선 동작: 서버에서 토큰 없으면 dev 허용/차단 판단
-  const raw = localStorage.getItem('auth0spajs')
-  // 실제 앱에서는 useAuth0 훅으로 얻는 게 정석이지만, 간이 버전으로 비워둠.
-  return undefined
-}
-
-export async function saveMessage({ room, text }: { room: string; text: string }) {
+export async function saveMessage({ room, text, meta }: { room: string; text: string; meta?: any }) {
   const res = await fetch('/.netlify/functions/message', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(await token() ? { Authorization: 'Bearer ' + await token() } : {}),
-    },
-    body: JSON.stringify({ room, text }),
+    headers: {  'Content-Type': 'application/json'  },
+    body: JSON.stringify({ room, text, meta }),
   })
   if (!res.ok) throw new Error(await res.text())
   return res.json()
