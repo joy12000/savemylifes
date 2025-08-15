@@ -23,3 +23,12 @@
 2) `package.json`에 `@auth0/auth0-spa-js` 추가(이미 동봉됨 / 의존성 설치 시 반영)
 3) Netlify에 위 `EXPO_PUBLIC_*` 두 개 환경변수 추가 후 **Clear cache and deploy**
 4) 웹에서 로그인 → 홈에서 "생존신고", 채팅 탭→채팅방 카드 클릭→실제 채팅 동작 확인
+
+## 변경추가: 아이콘 라이브러리 교체
+- `lucide-react-native` → **@expo/vector-icons (Feather)** 로 교체했습니다.
+- 코드에서 `<Heart />` 같은 루시드 아이콘은 `<Feather name="heart" />` 형태로 자동 변환되어 제공합니다.
+- 별도 네이티브 링크 작업이 필요 없고, Expo Web/모바일 모두 호환됩니다.
+
+## 버전 정렬
+- React **19.0.0** / React Native **0.79.1** (원본 프로젝트 라인 유지)
+- devDeps `@types/react`는 **^19.0.0** 으로 맞췄습니다.

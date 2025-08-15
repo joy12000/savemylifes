@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import { Lock, MessageSquare, User } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 
 interface ChatRoom {
   id: string;
@@ -44,11 +44,11 @@ export function ChatRoomCard({ chatRoom, onPress }: ChatRoomCardProps) {
             styles.avatar,
             !chatRoom.unlocked && styles.lockedAvatar
           ]}>
-            <User size={24} color="#FFFFFF" />
+            <Feather name="user" size={24} color="#FFFFFF" /
           </View>
           {!chatRoom.unlocked && (
             <View style={styles.lockBadge}>
-              <Lock size={12} color="#FFFFFF" />
+              <Feather name="lock" size={12} color="#FFFFFF" /
             </View>
           )}
         </View>
@@ -102,9 +102,9 @@ export function ChatRoomCard({ chatRoom, onPress }: ChatRoomCardProps) {
           )}
           
           {chatRoom.unlocked ? (
-            <MessageSquare size={20} color="#10B981" />
+            <Feather name="message-square" size={20} color="#10B981" /
           ) : (
-            <Lock size={20} color="#9CA3AF" />
+            <Feather name="lock" size={20} color="#9CA3AF" /
           )}
         </View>
       </View>

@@ -10,7 +10,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Heart, Clock, TriangleAlert as AlertTriangle, CircleCheck as CheckCircle } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 import { FriendStatusCard } from '@/components/FriendStatusCard';
 import { CheckInButton } from '@/components/CheckInButton';
 import { mockData } from '@/data/mockData';
@@ -98,7 +98,7 @@ export default function HomeScreen() {
           
           {lastCheckIn && (
             <View style={styles.lastCheckInContainer}>
-              <CheckCircle size={16} color="#10B981" />
+              <Feather name="check-circle" size={16} color="#10B981" /
               <Text style={styles.lastCheckInText}>
                 마지막 신고: {lastCheckIn.toLocaleTimeString('ko-KR', { 
                   hour: '2-digit', 
@@ -114,17 +114,17 @@ export default function HomeScreen() {
           <Text style={styles.sectionTitle}>친구 상태 현황</Text>
           <View style={styles.statsRow}>
             <View style={[styles.statCard, styles.safeCard]}>
-              <CheckCircle size={24} color="#10B981" />
+              <Feather name="check-circle" size={24} color="#10B981" /
               <Text style={styles.statNumber}>{stats.safe}</Text>
               <Text style={styles.statLabel}>안전</Text>
             </View>
             <View style={[styles.statCard, styles.overdueCard]}>
-              <Clock size={24} color="#F59E0B" />
+              <Feather name="clock" size={24} color="#F59E0B" /
               <Text style={styles.statNumber}>{stats.overdue}</Text>
               <Text style={styles.statLabel}>지연</Text>
             </View>
             <View style={[styles.statCard, styles.missingCard]}>
-              <AlertTriangle size={24} color="#EF4444" />
+              <Feather name="alert-triangle" size={24} color="#EF4444" /
               <Text style={styles.statNumber}>{stats.missing}</Text>
               <Text style={styles.statLabel}>미신고</Text>
             </View>

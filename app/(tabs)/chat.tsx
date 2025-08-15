@@ -9,7 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { MessageSquare, Lock, Award } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 import { ChatRoomCard } from '@/components/ChatRoomCard';
 import { mockData } from '@/data/mockData';
 
@@ -47,7 +47,7 @@ export default function ChatScreen() {
         {unlockedChats.length > 0 && (
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <MessageSquare size={20} color="#10B981" />
+              <Feather name="message-square" size={20} color="#10B981" /
               <Text style={styles.sectionTitle}>활성 채팅 ({unlockedChats.length})</Text>
             </View>
             {unlockedChats.map((chatRoom) => (
@@ -64,7 +64,7 @@ export default function ChatScreen() {
         {lockedChats.length > 0 && (
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Lock size={20} color="#F59E0B" />
+              <Feather name="lock" size={20} color="#F59E0B" /
               <Text style={styles.sectionTitle}>잠금 채팅 ({lockedChats.length})</Text>
             </View>
             <Text style={styles.sectionDescription}>
@@ -82,7 +82,7 @@ export default function ChatScreen() {
 
         {/* Info Section */}
         <View style={styles.infoSection}>
-          <Award size={24} color="#3B82F6" />
+          <Feather name="award" size={24} color="#3B82F6" /
           <Text style={styles.infoTitle}>채팅 잠금 해제 방법</Text>
           <Text style={styles.infoText}>
             친구와 서로 10회 이상 생존신고를 주고받으면 채팅 기능이 활성화됩니다. 
