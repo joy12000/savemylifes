@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { Bell, CircleCheck as CheckCircle, Clock, TriangleAlert as AlertTriangle } from '@/components/icons';
 
 interface Friend {
   id: string;
@@ -24,11 +24,11 @@ export function FriendStatusCard({ friend, onRemind }: FriendStatusCardProps) {
   const getStatusIcon = () => {
     switch (friend.status) {
       case 'safe':
-        return <Feather name="check-circle" size={20} color="#10B981" /;
+        return <CheckCircle size={20} color="#10B981" />;
       case 'overdue':
-        return <Feather name="clock" size={20} color="#F59E0B" /;
+        return <Clock size={20} color="#F59E0B" />;
       case 'missing':
-        return <Feather name="alert-triangle" size={20} color="#EF4444" /;
+        return <AlertTriangle size={20} color="#EF4444" />;
     }
   };
 
@@ -87,7 +87,7 @@ export function FriendStatusCard({ friend, onRemind }: FriendStatusCardProps) {
         
         {friend.status !== 'safe' && (
           <TouchableOpacity style={styles.remindButton} onPress={onRemind}>
-            <Feather name="bell" size={16} color="#FFFFFF" /
+            <Bell size={16} color="#FFFFFF" />
           </TouchableOpacity>
         )}
       </View>

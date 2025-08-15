@@ -10,7 +10,7 @@ import {
   Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Feather } from '@expo/vector-icons';
+import { Plus, Search, UserPlus, X } from '@/components/icons';
 import { FriendCard } from '@/components/FriendCard';
 import { mockData } from '@/data/mockData';
 
@@ -71,13 +71,13 @@ export default function FriendsScreen() {
         <TouchableOpacity
           style={styles.addButton}
           onPress={() => setShowAddModal(true)}>
-          <Feather name="plus" size={24} color="#FFFFFF" /
+          <Plus size={24} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
 
       {/* Search Bar */}
       <View style={styles.searchContainer}>
-        <Feather name="search" size={20} color="#6B7280" /
+        <Search size={20} color="#6B7280" />
         <TextInput
           style={styles.searchInput}
           placeholder="친구 검색..."

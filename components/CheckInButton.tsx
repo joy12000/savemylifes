@@ -5,7 +5,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { Heart, CircleCheck as CheckCircle } from '@/components/icons';
 
 interface CheckInButtonProps {
   onPress: () => void;
@@ -26,9 +26,9 @@ export function CheckInButton({ onPress, canCheckIn, lastCheckIn }: CheckInButto
         activeOpacity={0.8}>
         
         {canCheckIn ? (
-          <Feather name="heart" size={32} color="#FFFFFF" fill="#FFFFFF" /
+          <Heart size={32} color="#FFFFFF" fill="#FFFFFF" />
         ) : (
-          <Feather name="check-circle" size={32} color="#FFFFFF" /
+          <CheckCircle size={32} color="#FFFFFF" />
         )}
         
         <Text style={styles.buttonText}>

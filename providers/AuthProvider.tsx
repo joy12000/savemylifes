@@ -30,7 +30,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     (async () => {
       if (Platform.OS !== 'web') {
         setReady(true);
-        setAuthed(true); // 네이티브에선 임시로 인증 우회(웹만 사용)
+        setAuthed(true);
         return;
       }
       const domain = process.env.EXPO_PUBLIC_AUTH0_DOMAIN as string | undefined;
@@ -83,6 +83,4 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
+export function useAuth() { return useContext(AuthContext); }

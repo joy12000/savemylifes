@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { MoveVertical as MoreVertical, CircleCheck as CheckCircle, Clock, TriangleAlert as AlertTriangle } from '@/components/icons';
 
 interface Friend {
   id: string;
@@ -25,11 +25,11 @@ export function FriendCard({ friend, onRemove }: FriendCardProps) {
   const getStatusIcon = () => {
     switch (friend.status) {
       case 'safe':
-        return <Feather name="check-circle" size={16} color="#10B981" /;
+        return <CheckCircle size={16} color="#10B981" />;
       case 'overdue':
-        return <Feather name="clock" size={16} color="#F59E0B" /;
+        return <Clock size={16} color="#F59E0B" />;
       case 'missing':
-        return <Feather name="alert-triangle" size={16} color="#EF4444" /;
+        return <AlertTriangle size={16} color="#EF4444" />;
     }
   };
 

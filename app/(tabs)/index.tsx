@@ -10,7 +10,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Feather } from '@expo/vector-icons';
+import { Heart, Clock, TriangleAlert as AlertTriangle, CircleCheck as CheckCircle } from '@/components/icons';
 import { FriendStatusCard } from '@/components/FriendStatusCard';
 import { CheckInButton } from '@/components/CheckInButton';
 import { mockData } from '@/data/mockData';
@@ -57,6 +57,30 @@ export default function HomeScreen() {
     );
   };
 
+  async function sendCheckIn(){
+    if(sending) return;
+    setSending(true);
+    try{
+      let location: {lat:number, lon:number} | undefined = undefined;
+      if (typeof navigator !== 'undefined' && 'geolocation' in navigator){
+        await new Promise<void>((resolve)=>{
+          navigator.geolocation.getCurrentPosition((pos)=>{
+            location = { lat: pos.coords.latitude, lon: pos.coords.longitude }; resolve();
+          }, ()=>resolve(), { enableHighAccuracy: true, timeout: 4000 })
+        })
+      }
+      await authedFetch('/.netlify/functions/report-submit', {
+        method: 'POST',
+        body: JSON.stringify({ message: '살아있습니다.', location })
+      });
+      Alert.alert('전송 완료', '생존신고가 저장되었습니다.');
+    }catch(e:any){
+      Alert.alert('전송 실패', String(e?.message ?? e));
+    }finally{
+      setSending(false);
+    }
+  }
+
   const onRefresh = () => {
     setRefreshing(true);
     // Simulate API call
@@ -98,7 +122,7 @@ export default function HomeScreen() {
           
           {lastCheckIn && (
             <View style={styles.lastCheckInContainer}>
-              <Feather name="check-circle" size={16} color="#10B981" /
+              <CheckCircle size={16} color="#10B981" />
               <Text style={styles.lastCheckInText}>
                 마지막 신고: {lastCheckIn.toLocaleTimeString('ko-KR', { 
                   hour: '2-digit', 
@@ -114,17 +138,17 @@ export default function HomeScreen() {
           <Text style={styles.sectionTitle}>친구 상태 현황</Text>
           <View style={styles.statsRow}>
             <View style={[styles.statCard, styles.safeCard]}>
-              <Feather name="check-circle" size={24} color="#10B981" /
+              <CheckCircle size={24} color="#10B981" />
               <Text style={styles.statNumber}>{stats.safe}</Text>
               <Text style={styles.statLabel}>안전</Text>
             </View>
             <View style={[styles.statCard, styles.overdueCard]}>
-              <Feather name="clock" size={24} color="#F59E0B" /
+              <Clock size={24} color="#F59E0B" />
               <Text style={styles.statNumber}>{stats.overdue}</Text>
               <Text style={styles.statLabel}>지연</Text>
             </View>
             <View style={[styles.statCard, styles.missingCard]}>
-              <Feather name="alert-triangle" size={24} color="#EF4444" /
+              <AlertTriangle size={24} color="#EF4444" />
               <Text style={styles.statNumber}>{stats.missing}</Text>
               <Text style={styles.statLabel}>미신고</Text>
             </View>

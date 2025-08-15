@@ -9,7 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Feather } from '@expo/vector-icons';
+import { User, Bell, Shield, CircleHelp as HelpCircle, LogOut, Copy, Calendar, Award } from '@/components/icons';
 
 export default function ProfileScreen() {
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
@@ -49,7 +49,7 @@ export default function ProfileScreen() {
         {/* User Info */}
         <View style={styles.userSection}>
           <View style={styles.userAvatar}>
-            <Feather name="user" size={40} color="#FFFFFF" /
+            <User size={40} color="#FFFFFF" />
           </View>
           <View style={styles.userInfo}>
             <Text style={styles.userName}>김철수</Text>
@@ -68,7 +68,7 @@ export default function ProfileScreen() {
             <Text style={styles.statLabel}>총 신고 횟수</Text>
           </View>
           <View style={styles.statItem}>
-            <Feather name="award" size={24} color="#F59E0B" /
+            <Award size={24} color="#F59E0B" />
             <Text style={styles.statNumber}>{streak}</Text>
             <Text style={styles.statLabel}>연속 신고</Text>
           </View>
@@ -80,7 +80,7 @@ export default function ProfileScreen() {
           
           <View style={styles.settingItem}>
             <View style={styles.settingLeft}>
-              <Feather name="bell" size={20} color="#6B7280" /
+              <Bell size={20} color="#6B7280" />
               <Text style={styles.settingText}>푸시 알림</Text>
             </View>
             <Switch
@@ -93,7 +93,7 @@ export default function ProfileScreen() {
 
           <View style={styles.settingItem}>
             <View style={styles.settingLeft}>
-              <Feather name="shield" size={20} color="#6B7280" /
+              <Shield size={20} color="#6B7280" />
               <Text style={styles.settingText}>긴급 모드</Text>
             </View>
             <Switch
@@ -121,7 +121,7 @@ export default function ProfileScreen() {
         {/* Emergency Info */}
         {emergencyMode && (
           <View style={styles.emergencyInfo}>
-            <Feather name="shield" size={20} color="#EF4444" /
+            <Shield size={20} color="#EF4444" />
             <Text style={styles.emergencyTitle}>긴급 모드 활성화</Text>
             <Text style={styles.emergencyDescription}>
               생존신고가 24시간 이상 없을 경우 등록된 긴급 연락처로 알림이 전송됩니다.

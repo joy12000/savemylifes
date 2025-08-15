@@ -28,7 +28,7 @@ export default function ChatRoom() {
   }, [room]);
 
   useEffect(() => {
-    if (Platform.OS !== 'web') return; // SSE는 웹만
+    if (Platform.OS !== 'web') return;
     const es = new EventSource(`/sse/${room}`);
     es.onmessage = (evt) => {
       try {

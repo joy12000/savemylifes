@@ -1,17 +1,14 @@
-import fs from 'node:fs'
-import path from 'node:path'
 
-const dist = 'dist'
-fs.mkdirSync(dist, { recursive: true })
+const fs = require('fs');
+const path = require('path');
 
-// SPA 200 fallback
-fs.writeFileSync(path.join(dist, '200.html'), '<!doctype html><title>SPA</title><meta http-equiv="refresh" content="0; url=/" />')
+const dist = path.join(process.cwd(), 'dist');
+if (!fs.existsSync(dist)) fs.mkdirSync(dist, { recursive: true });
 
-// health.txt
-fs.writeFileSync(path.join(dist, 'health.txt'), String(Date.now()))
-
-// _redirects for SPA + SSE route pass-through
-fs.writeFileSync(path.join(dist, '_redirects'), [
-  '/sse/* /.netlify/edge-functions/chat-sse 200',
-  '/* /index.html 200'
-].join('\n'))
+// SPA fallback
+fs.writeFileSync(path.join(dist, '_redirects'), '/* /index.html 200\n');
+// 200.html
+fs.writeFileSync(path.join(dist, '200.html'), '<!doctype html><meta charset="utf-8"><script>location.href="/"</script>');
+// health
+fs.writeFileSync(path.join(dist, 'health.txt'), String(Date.now()));
+console.log('postbuild artifacts created');

@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Heart, Users, MessageSquare, Settings } from 'lucide-react-native';
+import { Heart, Users, MessageSquare, Settings } from '@/components/icons';
 
 export default function TabLayout() {
   return (
