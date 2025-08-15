@@ -15,16 +15,18 @@
     "expo": "53.0.20",
     "expo-router": "3.5.20",
     "jose": "^5.9.6",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-native-web": "~0.19.13"
   },
   "devDependencies": {
-    "@types/react": "19.0.14",
-    "@types/react-dom": "19.0.2",
-    "typescript": "^5.5.4"
+    "@types/react": "18.2.74",
+    "@types/react-dom": "18.2.25",
+    "typescript": "^5.5.4",
+    "metro": "0.80.9"
   },
   "overrides": {
-    "@expo/vector-icons": "14.1.0"
+    "@expo/vector-icons": "14.1.0",
+    "metro": "0.80.9"
   }
 }
