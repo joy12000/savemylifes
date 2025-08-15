@@ -1,1 +1,3 @@
-self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));
+// noop service worker for PWA install prompt
+self.addEventListener('install', ()=>self.skipWaiting())
+self.addEventListener('activate', ()=>self.clients.claim())

@@ -1,20 +1,21 @@
+
 [build]
-  command = "npm install --no-audit --no-fund && npm run build"
   publish = "dist"
+  command = "npm run build"
 
-functions = "netlify/functions"
-edge_functions = "netlify/edge-functions"
+[functions]
+  directory = "netlify/functions"
 
+[functions."alerts-check"]
+  # If you prefer TOML scheduling instead of inline config:
+  # schedule = "@hourly"
+
+[[edge_functions]]
+  path = "/sse/:room"
+  function = "chat-sse"
+
+# SPA fallback if not using _redirects file
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[[redirects]]
-  from = "/favicon.ico"
-  to = "/favicon.png"
-  status = 200
-
-[[edge_functions]]
-  function = "chat-sse"
-  path = "/sse/:room"

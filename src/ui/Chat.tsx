@@ -1,92 +1,76 @@
-import React, { useEffect, useRef, useState } from "react";
-import type { Auth0Client } from "@auth0/auth0-spa-js";
 
-type Msg = {
-  id: string;
-  room: string;
-  userId: string;
-  userName: string;
-  text: string;
-  ts: number;
-};
+import React, { useEffect, useRef, useState } from "react"
 
-const ROOM_ID = "general";
-
-async function getBearer(auth0: Auth0Client) {
-  const claims = await auth0.getIdTokenClaims();
-  return claims?.__raw;
+type Props = {
+  auth0: { getIdTokenClaims: () => Promise<any> }
 }
+type Message = { id: string; userId: string; text: string; ts: number }
 
-export function Chat({ user, auth0 }: { user: any, auth0: Auth0Client }) {
-  const [messages, setMessages] = useState<Msg[]>([]);
-  const [text, setText] = useState("");
-  const evtRef = useRef<EventSource | null>(null);
+export default function Chat({ auth0 }: Props) {
+  const [text, setText] = useState("")
+  const [messages, setMessages] = useState<Message[]>([])
+  const [room] = useState("general")
+  const esRef = useRef<EventSource | null>(null)
 
-  async function fetchHistory() {
-    const token = await getBearer(auth0);
-    const res = await fetch(`/.netlify/functions/chat-list?room=${encodeURIComponent(ROOM_ID)}&limit=50`, {
-      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-      credentials: "include"
-    });
-    const data = await res.json();
-    setMessages(data.messages || []);
-  }
-
-  async function sendMessage() {
-    const token = await getBearer(auth0);
-    const body = { room: ROOM_ID, text };
-    const res = await fetch("/.netlify/functions/chat-post", {
+  async function send(){
+    const claims = await auth0.getIdTokenClaims()
+    const token = claims?.__raw as string | undefined
+    await fetch("/.netlify/functions/chat-post", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "content-type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {})
       },
-      credentials: "include",
-      body: JSON.stringify(body),
-    });
-    if (!res.ok) {
-      const t = await res.text();
-      alert("메시지 전송 실패: " + t);
-      return;
-    }
-    setText("");
+      body: JSON.stringify({ room, text })
+    })
+    setText("")
   }
 
-  useEffect(() => {
-    fetchHistory();
-    const url = `/sse/${encodeURIComponent(ROOM_ID)}`;
-    const es = new EventSource(url, { withCredentials: true });
-    evtRef.current = es;
-    es.onmessage = (ev) => {
-      try {
-        const m = JSON.parse(ev.data) as Msg;
-        setMessages((prev) => {
-          const exists = prev.some(x => x.id === m.id);
-          if (exists) return prev;
-          return [...prev, m].slice(-100);
-        });
-      } catch {}
-    };
-    es.onerror = () => {};
-    return () => { es.close(); };
-  }, []);
+  useEffect(()=>{
+    // 최초 목록
+    (async ()=>{
+      const claims = await auth0.getIdTokenClaims()
+      const token = claims?.__raw as string | undefined
+      const res = await fetch(`/.netlify/functions/chat-list?room=${room}&limit=50`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      })
+      if(res.ok){
+        const data = await res.json()
+        setMessages(data.items ?? [])
+      }
+    })()
+
+    // SSE 구독
+    const es = new EventSource(`/sse/${room}`)
+    es.onmessage = (evt)=>{
+      try{
+        const msg = JSON.parse(evt.data) as Message
+        setMessages(prev => {
+          const exists = prev.some(m => m.id === msg.id)
+          return exists ? prev : [...prev.slice(-99), msg]
+        })
+      }catch{}
+    }
+    es.onerror = ()=>{ /* 자동 재연결 */ }
+    esRef.current = es
+    return ()=>{ es.close() }
+  }, [auth0, room])
 
   return (
-    <div style={{display:'grid', gap:12}}>
-      <div style={{height: '60vh', overflowY: 'auto', border: '1px solid #ddd', borderRadius: 8, padding: 12}}>
+    <div style={{maxWidth:680, margin:"0 auto", padding:16}}>
+      <h2>채팅</h2>
+      <div style={{border:"1px solid #ddd", borderRadius:12, padding:12, minHeight:260}}>
         {messages.map(m => (
-          <div key={m.id} style={{marginBottom:8}}>
-            <b>{m.userName || m.userId}</b>
-            <span style={{color:'#999', marginLeft:6, fontSize:12}}>{new Date(m.ts).toLocaleTimeString()}</span>
+          <div key={m.id} style={{padding:"6px 0", borderBottom:"1px dashed #eee"}}>
+            <div style={{fontSize:12, opacity:.7}}>{new Date(m.ts).toLocaleString()} · {m.userId}</div>
             <div>{m.text}</div>
           </div>
         ))}
-        {messages.length === 0 && <div style={{color:'#666'}}>아직 메시지가 없어요.</div>}
       </div>
-      <div style={{display:'flex', gap:8}}>
-        <input value={text} onChange={e=>setText(e.target.value)} placeholder="메시지…" style={{flex:1, padding:8}} />
-        <button onClick={sendMessage} disabled={!text.trim()}>전송</button>
+      <div style={{display:"flex", gap:8, marginTop:12}}>
+        <input value={text} onChange={e=>setText(e.target.value)} style={{flex:1, padding:10}} placeholder="메시지 입력" />
+        <button onClick={send} disabled={!text.trim()}>보내기</button>
       </div>
     </div>
-  );
+  )
 }
