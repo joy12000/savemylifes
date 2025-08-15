@@ -1,19 +1,21 @@
-
 [build]
-  publish = "dist"
   command = "npm run build"
+  publish = "dist"
+  edge_functions = "netlify/edge-functions"
+
+[build.environment]
+  # ★ Node 22 → 20으로 고정 (Expo 53과 궁합 OK)
+  NODE_VERSION = "20.18.0"
+  # (선택) npm 피어의존성 충돌 예방
+  NPM_FLAGS = "--legacy-peer-deps"
 
 [functions]
   directory = "netlify/functions"
-
-[[edge_functions]]
-  path = "/sse/:room"
-  function = "chat-sse"
+  node_bundler = "esbuild"
+  # jose를 번들 외부로 두면 함수 빌드 문제 예방에 도움
+  external_node_modules = ["jose"]
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[build.environment]
-  NPM_FLAGS = "--legacy-peer-deps"
