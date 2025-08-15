@@ -1,32 +1,26 @@
 {
   "compilerOptions": {
     "target": "ES2020",
+    "useDefineForClassFields": true,
     "lib": [
       "ES2020",
-      "DOM"
+      "DOM",
+      "DOM.Iterable"
     ],
-    "jsx": "react-jsx",
-    "moduleResolution": "Bundler",
-    "strict": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./*"
-      ]
-    },
-    "allowJs": true,
+    "module": "ESNext",
     "skipLibCheck": true,
+    "allowJs": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "jsx": "react-jsx"
   },
-  "extends": "expo/tsconfig.base",
   "include": [
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
+    "src"
   ]
 }

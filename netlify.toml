@@ -1,17 +1,14 @@
 [build]
-  command = "node scripts/patch-expo-modules-core.js && npm run build"
+  command = "npm run build"
   publish = "dist"
-  edge_functions = "netlify/edge-functions"
 
 [build.environment]
   NODE_VERSION = "20.19.4"
-  EXPO_WEB_BUILD = "true"
-  NPM_FLAGS = "--legacy-peer-deps"
 
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
-  external_node_modules = ["jose"]
+  external_node_modules = ["@netlify/blobs","jose","uuid"]
 
 [[redirects]]
   from = "/*"
