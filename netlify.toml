@@ -4,15 +4,13 @@
   edge_functions = "netlify/edge-functions"
 
 [build.environment]
-  # ★ Node 22 → 20으로 고정 (Expo 53과 궁합 OK)
-  NODE_VERSION = "20.18.0"
-  # (선택) npm 피어의존성 충돌 예방
+  NODE_VERSION = "20.19.4"
+  EXPO_WEB_BUILD = "true"
   NPM_FLAGS = "--legacy-peer-deps"
 
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
-  # jose를 번들 외부로 두면 함수 빌드 문제 예방에 도움
   external_node_modules = ["jose"]
 
 [[redirects]]
