@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useApi } from '@/lib/api';
 import {
   View,
   Text,
@@ -15,6 +16,8 @@ import { CheckInButton } from '@/components/CheckInButton';
 import { mockData } from '@/data/mockData';
 
 export default function HomeScreen() {
+  const { authedFetch } = useApi();
+  const [sending, setSending] = useState(false);
   const [lastCheckIn, setLastCheckIn] = useState<Date | null>(null);
   const [canCheckIn, setCanCheckIn] = useState(true);
   const [friends, setFriends] = useState(mockData.friends);
@@ -87,7 +90,7 @@ export default function HomeScreen() {
 
         {/* Check-in Section */}
         <View style={styles.checkInSection}>
-          <CheckInButton 
+          <CheckInButton onPress={sendCheckIn} 
             onPress={handleCheckIn}
             canCheckIn={canCheckIn}
             lastCheckIn={lastCheckIn}

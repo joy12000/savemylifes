@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'expo-router';
 import {
   View,
   Text,
@@ -13,6 +14,7 @@ import { ChatRoomCard } from '@/components/ChatRoomCard';
 import { mockData } from '@/data/mockData';
 
 export default function ChatScreen() {
+  const router = useRouter();
   const [chatRooms] = useState(mockData.chatRooms);
 
   const handleChatPress = (chatRoom: any) => {
