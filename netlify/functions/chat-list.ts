@@ -1,7 +1,23 @@
-// netlify/functions/chat-list.ts
+
 import type { Handler } from "@netlify/functions";
 import { getStore } from "@netlify/blobs";
 import * as jose from "jose";
+
+function blobsStore() {
+  const siteID =
+    process.env.BLOBS_SITE_ID ||
+    process.env.NETLIFY_SITE_ID ||
+    process.env.SITE_ID ||
+    process.env.API_ID;
+  const token =
+    process.env.BLOBS_TOKEN ||
+    process.env.NETLIFY_ACCESS_TOKEN ||
+    process.env.NETLIFY_API_TOKEN ||
+    process.env.PERSONAL_ACCESS_TOKEN;
+  return siteID && token
+    ? getStore({ name: "chat", siteID, token })
+    : getStore({ name: "chat" });
+}
 
 async function verifyAuth(event: any) {
   const auth = event.headers?.authorization || "";
@@ -14,7 +30,7 @@ async function verifyAuth(event: any) {
   const JWKS = jose.createRemoteJWKSet(new URL(`${issuer}.well-known/jwks.json`));
   const { payload } = await jose.jwtVerify(token, JWKS, {
     issuer,
-    audience: process.env.AUTH0_AUDIENCE || process.env.VITE_AUTH0_AUDIENCE
+    audience: process.env.AUTH0_AUDIENCE || process.env.VITE_AUTH0_AUDIENCE,
   });
   return payload;
 }
@@ -28,9 +44,9 @@ export const handler: Handler = async (event) => {
     const room = String(params.room || "general");
     const limit = Math.min(parseInt(String(params.limit || "50")), 200);
 
-    const store = getStore({ name: "chat" });
+    const store = blobsStore();
     const listing = await store.list({ prefix: `rooms/${room}/messages/` });
-    const keys = (listing.blobs || []).map(b => b.key).sort();
+    const keys = (listing.blobs || []).map((b) => b.key).sort();
     const last = keys.slice(-limit);
 
     const messages: any[] = [];
@@ -40,6 +56,7 @@ export const handler: Handler = async (event) => {
         if (m) messages.push(m);
       } catch {}
     }
+
     return { statusCode: 200, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages }) };
   } catch (err: any) {
     return { statusCode: 401, body: "Unauthorized: " + (err?.message || "verify failed") };
